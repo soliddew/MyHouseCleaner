@@ -1,0 +1,142 @@
+Class Shrubbery01Dumb : Actor
+{
+    Default
+    {
+        Radius 8;
+        Height 16;
+        +NOBLOCKMAP;
+        +MOVEWITHSECTOR;
+    }
+
+    override void Tick()
+    {
+        //ufgh...
+    }
+
+    States
+    {
+    Spawn:
+        BSH2 A -1;
+        Stop;
+    }
+}
+
+Class Shrubbery02Dumb : Shrubbery01Dumb
+{
+    States
+    {
+    Spawn:
+        BSH3 A -1;
+        Stop;
+    }
+}
+
+Class Shrubbery03Dumb : Shrubbery01Dumb
+{
+    States
+    {
+    Spawn:
+        BSH4 A -1;
+        Stop;
+    }
+}
+
+Class Shrubbery04Dumb : Shrubbery01Dumb
+{
+    States
+    {
+    Spawn:
+    BSH5 A -1;
+    Stop;
+    }
+}
+
+Class Grass01Dumb : Shrubbery01Dumb
+{
+    States
+    {
+    Spawn:
+        GRS3 A -1;
+        Stop;
+    }
+}
+
+Class Grass02Dumb : Shrubbery01Dumb
+{
+    States
+    {
+    Spawn:
+        GRS4 A -1;
+        Stop;
+    }
+}
+
+Class Grass03Dumb : Shrubbery01Dumb
+{
+    States
+    {
+    Spawn:
+        GRS5 A -1;
+        Stop;
+    }
+}
+
+class BallDumb : Actor
+{
+    Default
+    {
+        Radius	4;
+        Height	8;
+        Scale	0.5;
+        +NOGRAVITY;
+        +FORCEXYBILLBOARD;
+    }
+
+    override void Tick()
+    {
+
+    }
+}
+
+Class RedBallDumb : BallDumb
+{
+   	States 
+   	{ 
+   		Spawn: 
+            BALL A -1;
+            loop;
+   	} 
+}
+
+Class BlueBallDumb : BallDumb
+{
+
+   	States 
+   	{ 
+   		Spawn: 
+            BALL B -1;
+            loop;
+   	} 
+}
+
+Class YellowBallDumb : BallDumb
+{
+
+   	States 
+   	{ 
+   		Spawn: 
+            BALL C -1;
+            loop;
+   	} 
+}
+
+Class GreenBallDumb : BallDumb
+{
+
+   	States 
+   	{ 
+   		Spawn: 
+            BALL D -1;
+            loop;
+   	} 
+}

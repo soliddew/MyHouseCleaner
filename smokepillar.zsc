@@ -1,0 +1,128 @@
+class KD_SmokePillarVT : SwitchableDecoration
+{
+    int user_SPitch;
+    int user_Angle;
+    int user_Pitch;
+    int user_Speed;
+
+    Default
+    {
+        Radius 2;
+        Height 4;
+        Scale 0.4;
+        +NoInteraction;
+    }
+
+    States
+    {
+        Spawn:
+		Active:
+			TNT1 A 0 NoDelay {
+                user_SPitch = Args[4] * 360 / 255;
+                pitch = user_SPitch;
+                if(args[0] <= 0)
+                {
+                    args[0] = 1;
+                }
+            }
+		Generate:					
+			TNT1 A 0 {
+                tics = Args[0];
+                user_Angle = Angle + Random(-Args[3], Args[3]) * 360 / 256;
+                user_Pitch = Pitch + Random(-Args[3], Args[3]) * 360 / 256;
+                user_Speed = Random(Args[1], Args[2]);
+            }
+            TNT1 A 0 {
+                let vt = Level.SpawnVisualThinker("KD_SmokeCloudVT");
+                double cospitch = cos(user_pitch);
+                vt.scale.x = scale.x;
+                vt.scale.y = scale.y;
+                vt.pos = pos;
+                vt.vel.x = Scale.X * cospitch * cos(User_Angle) * User_Speed;
+                vt.vel.y = Scale.X * cospitch * sin(User_Angle) * User_Speed;
+                vt.vel.z = Scale.X * sin(User_Pitch) * User_Speed;
+            }
+			Loop;
+		Inactive:
+			TNT1 A 350;
+			Wait;
+    }
+
+}
+
+class KD_SmokeCloudVT : VisualThinker
+{
+
+    int growthFactor;
+    bool fadeIn;
+    bool flippy;
+
+    override void PostBeginPlay()
+    {
+        Super.PostBeginPlay();
+        flags |= SPF_LOCAL_ANIM|SPF_FACECAMERA;
+        SetRenderStyle(Style_Translucent);
+        Alpha = 0.0;
+        growthFactor = scale.x * 500;
+        TextureID smoketex;
+        switch(random(0,3))
+        {
+            case 0: 
+                smoketex = TexMan.CheckForTexture("SMFUA0");
+                break;
+            case 1: 
+                smoketex = TexMan.CheckForTexture("SMFUB0");
+                break;  
+            case 2: 
+                smoketex = TexMan.CheckForTexture("SMFUC0");
+                break;
+            case 3: 
+                smoketex = TexMan.CheckForTexture("SMFUD0");
+                break; 
+        }
+        if(smoketex)
+        {
+            texture = smoketex;
+        }
+        fadeIn = true;
+        prev = pos;
+        UpdateSector();
+        UpdateSpriteInfo();
+    }
+
+    override void Tick()
+    {
+        if(IsFrozen() || bDestroyed) { Return; }
+        prev = pos;
+        pos += vel;
+        if(fadeIn)
+        {
+            Alpha += frandom(0.005, 0.008);
+            if(Alpha >= 0.5)
+            {
+                fadein = false;
+            }
+            return;
+        }
+        if(!flippy) // the fadeout was every two tics so we replicate that with a flippy
+        {
+            flippy = true;
+        }
+        else
+        {
+            Scale.X += frandom(0.01, 0.02) * growthFactor * 0.001;
+            Scale.Y = Scale.X;
+            Alpha -= frandom(0.001, 0.003);
+            if(Alpha <= 0)
+            {
+                Destroy();
+                return;
+            }
+            vel.x *= frandom(0.99, 1.01);
+            vel.y *= frandom(0.99, 1.01);
+            vel.z += frandom(0.0, 0.02);
+            flippy = false;
+        }
+    }
+
+}

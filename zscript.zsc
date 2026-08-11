@@ -1,0 +1,41 @@
+version "4.14"
+#include "smokepillar.zsc"
+#include "dummies.zsc"
+
+class HouseCleanerHandler : EventHandler
+{
+
+    Map<name, name> replacementMaps;
+    bool loadingComplete;
+
+    override void OnRegister()
+    {
+        replacementMaps.Insert("KD_SmokePillar", "KD_SmokePillarVT");
+        replacementMaps.Insert("Shrubbery01", "Shrubbery01Dumb");
+        replacementMaps.Insert("Shrubbery02", "Shrubbery02Dumb");
+        replacementMaps.Insert("Shrubbery03", "Shrubbery03Dumb");
+        replacementMaps.Insert("Shrubbery04", "Shrubbery04Dumb");
+        replacementMaps.Insert("Grass01", "Grass01Dumb");
+        replacementMaps.Insert("Grass02", "Grass02Dumb");
+        replacementMaps.Insert("Grass03", "Grass03Dumb");
+        replacementMaps.Insert("BlueBall", "BlueBallDumb");
+        replacementMaps.Insert("RedBall", "RedBallDumb");
+        replacementMaps.Insert("GreenBall", "GreenBallDumb");
+        replacementMaps.Insert("YellowBall", "YellowBallDumb");
+    }
+
+    override void WorldLoaded(WorldEvent E)
+    {
+        loadingComplete = true;
+    }
+
+    override void CheckReplacement(replaceEvent e)
+    {
+        if(loadingComplete) { Return; } // I know this is a pointless optimization, let me have it.
+        name replaceClass = replacementMaps.GetIfExists(e.replacee.GetClassName());
+        if(replaceClass)
+        {
+            e.replacement = replaceClass;
+        }
+    }
+}
