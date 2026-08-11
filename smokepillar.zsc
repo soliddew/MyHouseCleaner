@@ -1,3 +1,26 @@
+// -----------------------------------------------------------------------------
+//
+// Smoke screen for fuel tank explosions or fires
+//
+// Made by KeksDose, 6 December 2013
+//
+// Here's a dark thick as heck pillar of smoke.
+//
+// Converted to ZScript and modified to use a VisualThinker by Soliddew
+// Find more here:
+// http://forum.zdoom.org/viewtopic.php?f=37&t=39124&p=727949#p727383
+//
+// -----------------------------------------------------------------------------
+
+// Info about thing arguments:
+// Arg 0:	Delay between cloud spawns in tics (will always be greater than 0)
+// Arg 1:	Minimum velocity of clouds in mu / tic
+// Arg 2:	Maximum velocity of clouds in mu / tic
+// Arg 3:	Angle and pitch deviation as a byte angle
+// Arg 4:	Pitch as a byte angle (converted to degrees in DECORATE)
+//			0 means forward, 64 is upward, 192 is downward, etc.
+//			Yes, yes, UDMF, blah blah blah, I want Hexen format compatibility :P
+
 class KD_SmokePillarVT : SwitchableDecoration
 {
     int user_SPitch;
